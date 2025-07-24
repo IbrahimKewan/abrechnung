@@ -72,6 +72,24 @@ function groupByMonth(data) {
     }, {});
 }
 
+function getCategoryColor(category) {
+    switch (category) {
+        case "Gehalt":
+            return "bg-green-100 text-green-700";
+        case "Miete":
+            return "bg-red-100 text-red-700";
+        case "Lebensmittel":
+            return "bg-yellow-100 text-yellow-700";
+        case "Auto":
+            return "bg-blue-100 text-blue-700";
+        case "Freizeit":
+            return "bg-purple-100 text-purple-700";
+        case "Sonstiges":
+        default:
+            return "bg-gray-100 text-gray-700";
+    }
+}
+
 async function renderMonthlyOverview() {
     const data = await loadData();
     const grouped = groupByMonth(data);
@@ -84,34 +102,42 @@ async function renderMonthlyOverview() {
         .map((e, i) => {
             total += parseFloat(e.amount);
             return `
-      <div class="bg-white shadow-md p-4 rounded-xl border fade-in">
-        <div class="flex justify-between items-center">
-          <div>
-            <div class="text-lg font-bold text-gray-800 flex items-center gap-2">
-              <i class="ph ph-currency-circle-euro text-green-500"></i> ${
-                  e.title
-              }
-            </div>
-            <div class="text-sm text-gray-500">€${
-                (e.amount >= 0 ? "" : "-") + Math.abs(e.amount).toFixed(2)
-            }</div>
-            <div class="text-sm text-gray-500 mt-1">${e.category} • ${
-                e.costType
-            } • <span class="${
-                e.paid === "Ja" ? "text-green-600" : "text-red-600"
-            }">Bezahlt: ${e.paid}</span></div>
-            <div class="text-xs text-gray-400 mt-1">${new Date(
-                e.date
-            ).toLocaleString()}</div>
-            <div class="text-sm italic text-gray-600 mt-1">${
-                e.description
-            }</div>
-          </div>
-          <button onclick="deleteEntry(${i}, '${currentMonthKey}')" class="text-red-500 hover:text-red-700 text-xl">
-            <i class="ph ph-trash"></i>
-          </button>
-        </div>
-      </div>`;
+                <div class="bg-white shadow p-4 rounded-xl border fade-in">
+                    <div class="flex justify-between items-center">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 text-lg font-semibold text-gray-800">
+                        <i class="ph ph-currency-circle-euro text-blue-500"></i>
+                        ${e.title}
+                        </div>
+                        <div class="text-sm ${amountClass} font-bold">
+                        €${
+                            (e.amount >= 0 ? "" : "-") +
+                            Math.abs(e.amount).toFixed(2)
+                        }
+                        </div>
+                        <div class="text-sm text-gray-500">
+                        <span class="${categoryClass} px-2 py-1 rounded-full text-xs font-medium inline-block">
+                            ${e.category}
+                        </span>
+                        • ${e.costType} •
+                        <span class="${
+                            e.paid === "Ja" ? "text-green-600" : "text-red-600"
+                        }">
+                            Bezahlt: ${e.paid}
+                        </span>
+                        </div>
+                        <div class="text-xs text-gray-400">${new Date(
+                            e.date
+                        ).toLocaleString()}</div>
+                        <div class="text-sm italic text-gray-600">${
+                            e.description
+                        }</div>
+                    </div>
+                    <button onclick="deleteEntry(${i}, '${currentMonthKey}')" class="text-red-500 hover:text-red-700 text-xl">
+                        <i class="ph ph-trash"></i>
+                    </button>
+                    </div>
+                </div>`;
         })
         .join("");
 
