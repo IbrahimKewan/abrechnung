@@ -26,7 +26,7 @@
     </head>
     <body
         class="bg-gradient-to-tr from-blue-100 to-white min-h-screen p-4 sm:p-6">
-        <!-- Login-Bereich -->
+        <!-- Login -->
         <div
             id="login"
             class="max-w-sm mx-auto bg-white shadow-xl rounded-xl p-6 space-y-4">
@@ -43,7 +43,7 @@
             </button>
         </div>
 
-        <!-- App-Inhalt (versteckt bis Login) -->
+        <!-- App -->
         <div id="app" class="hidden">
             <div
                 class="max-w-3xl mx-auto bg-white shadow-xl rounded-2xl p-4 sm:p-6 space-y-6">
@@ -53,6 +53,7 @@
                         class="ph ph-wallet text-blue-600 text-xl sm:text-2xl"></i>
                     Ausgaben Tracker
                 </h1>
+
                 <form id="expenseForm" class="space-y-4 fade-in">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700"
@@ -155,18 +156,7 @@
             </div>
         </div>
 
-        <script>
-            function checkLogin() {
-                const input = document.getElementById("passwordInput").value;
-                const allowedPasswords = ["OmarAlfaruk", "Kewan"];
-                if (allowedPasswords.includes(input)) {
-                    document.getElementById("login").classList.add("hidden");
-                    document.getElementById("app").classList.remove("hidden");
-                } else {
-                    alert("Falsches Passwort. Versuche es erneut.");
-                }
-            }
-        </script>
+        <!-- Login Handling (optional: JS-Version mit fetch gibt es im script.js) -->
         <script src="script.js"></script>
     </body>
 </html>

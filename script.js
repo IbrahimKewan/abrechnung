@@ -9,6 +9,23 @@ const viewTitle = document.getElementById("viewTitle");
 
 let isYearly = false;
 
+async function checkLogin() {
+    const password = document.getElementById("passwordInput").value;
+    const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+    });
+
+    const result = await res.json();
+    if (result.success) {
+        document.getElementById("login").classList.add("hidden");
+        document.getElementById("app").classList.remove("hidden");
+    } else {
+        alert("Falsches Passwort");
+    }
+}
+
 async function loadData() {
     const res = await fetch("/api/ausgaben");
     return await res.json();
@@ -20,6 +37,26 @@ async function saveData(data) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
     });
+}
+
+async function deleteEntry(index, monthKey) {
+    const data = await loadData();
+    const grouped = groupByMonth(data);
+    const entries = grouped[monthKey] || [];
+    const entryToDelete = entries[index];
+
+    const updated = data.filter(
+        (e) =>
+            !(
+                e.date === entryToDelete.date &&
+                e.title === entryToDelete.title &&
+                e.amount === entryToDelete.amount
+            )
+    );
+    await saveData(updated);
+    await renderMonthlyOverview();
+    await renderYearlyOverview();
+    if (isYearly) await showMonthDetail(monthKey);
 }
 
 function groupByMonth(data) {
@@ -43,27 +80,36 @@ async function renderMonthlyOverview() {
 
     let total = 0;
     const detail = entries
-        .map((e) => {
+        .map((e, i) => {
             total += parseFloat(e.amount);
             return `
       <div class="bg-white shadow-md p-4 rounded-xl border fade-in">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-          <div class="text-lg font-bold text-gray-800 flex items-center gap-2">
-            <i class="ph ph-currency-circle-euro text-green-500"></i> ${e.title}
-          </div>
-          <div class="text-sm text-gray-500">€${
-              (e.amount >= 0 ? "" : "-") + Math.abs(e.amount).toFixed(2)
-          }</div>
-        </div>
-        <div class="text-sm text-gray-500 mt-1">${e.category} • ${
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="text-lg font-bold text-gray-800 flex items-center gap-2">
+              <i class="ph ph-currency-circle-euro text-green-500"></i> ${
+                  e.title
+              }
+            </div>
+            <div class="text-sm text-gray-500">€${
+                (e.amount >= 0 ? "" : "-") + Math.abs(e.amount).toFixed(2)
+            }</div>
+            <div class="text-sm text-gray-500 mt-1">${e.category} • ${
                 e.costType
             } • <span class="${
                 e.paid === "Ja" ? "text-green-600" : "text-red-600"
             }">Bezahlt: ${e.paid}</span></div>
-        <div class="text-xs text-gray-400 mt-1">${new Date(
-            e.date
-        ).toLocaleString()}</div>
-        <div class="text-sm italic text-gray-600 mt-1">${e.description}</div>
+            <div class="text-xs text-gray-400 mt-1">${new Date(
+                e.date
+            ).toLocaleString()}</div>
+            <div class="text-sm italic text-gray-600 mt-1">${
+                e.description
+            }</div>
+          </div>
+          <button onclick="deleteEntry(${i}, '${currentMonthKey}')" class="text-red-500 hover:text-red-700 text-xl">
+            <i class="ph ph-trash"></i>
+          </button>
+        </div>
       </div>`;
         })
         .join("");
