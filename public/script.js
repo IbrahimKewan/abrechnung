@@ -45,15 +45,16 @@ async function deleteEntry(index, monthKey) {
     const entries = grouped[monthKey] || [];
     const entryToDelete = entries[index];
 
-    const updated = data.filter(
-        (e) =>
-            !(
-                e.date === entryToDelete.date &&
-                e.title === entryToDelete.title &&
-                e.amount === entryToDelete.amount
-            )
-    );
-    await saveData(updated);
+    await fetch("/api/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            date: entryToDelete.date,
+            title: entryToDelete.title,
+            amount: entryToDelete.amount,
+        }),
+    });
+
     await renderMonthlyOverview();
     await renderYearlyOverview();
     if (isYearly) await showMonthDetail(monthKey);
