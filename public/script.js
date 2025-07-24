@@ -94,7 +94,7 @@ async function renderMonthlyOverview() {
     const data = await loadData();
     const grouped = groupByMonth(data);
     const currentMonthKey = new Date().toISOString().slice(0, 7);
-    const entries = grouped[currentMonthKey] || [];
+    const entries = (grouped[currentMonthKey] || []).reverse();
     monthlyOverview.innerHTML = "";
 
     let total = 0;
@@ -205,7 +205,7 @@ async function renderYearlyOverview() {
 async function showMonthDetail(monthKey) {
     const data = await loadData();
     const grouped = groupByMonth(data);
-    const entries = grouped[monthKey] || [];
+    const entries = (grouped[monthKey] || []).reverse();
 
     let monthlySum = 0;
     const detailHTML = entries
