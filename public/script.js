@@ -94,69 +94,62 @@ async function renderMonthlyOverview() {
     const data = await loadData();
     const grouped = groupByMonth(data);
     const currentMonthKey = new Date().toISOString().slice(0, 7);
-    const entries = (grouped[currentMonthKey] || []).reverse();
+    const entries = (grouped[currentMonthKey] || []).slice().reverse(); // Neueste oben
     monthlyOverview.innerHTML = "";
 
-    let total = 0;
+    let total = entries.reduce((sum, e) => sum + parseFloat(e.amount), 0);
+
     const detail = entries
         .map((e, i) => {
-            const categoryClass = getCategoryColor(e.category);
             const amountClass =
-                parseFloat(e.amount) >= 0 ? "text-green-600" : "text-red-600";
-            total += parseFloat(e.amount);
-
+                e.amount < 0 ? "text-red-600" : "text-green-600";
+            const categoryClass = getCategoryColor(e.category);
             return `
-            <div class="bg-white shadow p-4 rounded-xl border fade-in">
-                <div class="flex justify-between items-center">
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2 text-lg font-semibold text-gray-800">
-                            <i class="ph ph-currency-circle-euro text-blue-500"></i>
-                            ${e.title}
-                        </div>
-                        <div class="text-sm ${amountClass} font-bold">
-                            €${
-                                (e.amount >= 0 ? "" : "-") +
-                                Math.abs(e.amount).toFixed(2)
-                            }
-                        </div>
-                        <div class="text-sm text-gray-500">
-                            <span class="${categoryClass} px-2 py-1 rounded-full text-xs font-medium inline-block">
-                                ${e.category}
-                            </span>
-                            • ${e.costType} •
-                            <span class="${
-                                e.paid === "Ja"
-                                    ? "text-green-600"
-                                    : "text-red-600"
-                            }">
-                                Bezahlt: ${e.paid}
-                            </span>
-                        </div>
-                        <div class="text-xs text-gray-400">${new Date(
-                            e.date
-                        ).toLocaleString()}</div>
-                        <div class="text-sm italic text-gray-600">${
-                            e.description
-                        }</div>
-                    </div>
-                    <button onclick="deleteEntry(${i}, '${currentMonthKey}')" class="text-red-500 hover:text-red-700 text-xl">
-                        <i class="ph ph-trash"></i>
-                    </button>
-                </div>
-            </div>`;
+        <div class="bg-white shadow p-4 rounded-xl border fade-in">
+          <div class="flex justify-between items-center">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2 text-lg font-semibold text-gray-800">
+                <i class="ph ph-currency-circle-euro text-blue-500"></i> ${
+                    e.title
+                }
+              </div>
+              <div class="text-sm ${amountClass} font-bold">
+                €${(e.amount >= 0 ? "" : "-") + Math.abs(e.amount).toFixed(2)}
+              </div>
+              <div class="text-sm text-gray-500">
+                <span class="${categoryClass} px-2 py-1 rounded-full text-xs font-medium inline-block">
+                  ${e.category}
+                </span>
+                • ${e.costType} •
+                <span class="${
+                    e.paid === "Ja" ? "text-green-600" : "text-red-600"
+                }">
+                  Bezahlt: ${e.paid}
+                </span>
+              </div>
+              <div class="text-xs text-gray-400">${new Date(
+                  e.date
+              ).toLocaleString()}</div>
+              <div class="text-sm italic text-gray-600">${e.description}</div>
+            </div>
+            <button onclick="deleteEntry(${i}, '${currentMonthKey}')" class="text-red-500 hover:text-red-700 text-xl">
+              <i class="ph ph-trash"></i>
+            </button>
+          </div>
+        </div>`;
         })
         .join("");
 
     monthlyOverview.innerHTML = `
-    <h3 class="text-lg font-semibold text-blue-700 flex items-center gap-2">
-      <i class="ph ph-calendar-check"></i> Aktueller Monat: ${currentMonthKey}
-    </h3>
-    ${detail}
-    <div class="text-right text-md font-semibold text-gray-800 mt-2 bg-blue-50 py-2 px-3 rounded-lg inline-block ml-auto w-fit">
-      <i class="ph ph-coins text-yellow-500"></i> Monatssumme: €${total.toFixed(
-          2
-      )}
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-lg font-semibold text-blue-700 flex items-center gap-2">
+        <i class="ph ph-calendar-check"></i> Aktueller Monat: ${currentMonthKey}
+      </h3>
+      <div class="text-md font-semibold text-gray-800 bg-blue-50 py-1 px-3 rounded-lg">
+        <i class="ph ph-coins text-yellow-500"></i> €${total.toFixed(2)}
+      </div>
     </div>
+    ${detail}
   `;
 }
 
