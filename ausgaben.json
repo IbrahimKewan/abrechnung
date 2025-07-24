@@ -1,0 +1,65 @@
+[
+  {
+    "date": "2025-07-24T11:54:58.633Z",
+    "category": "Gehalt",
+    "title": "test",
+    "amount": -200,
+    "paid": "Ja",
+    "costType": "Fix",
+    "description": "awawe"
+  },
+  {
+    "date": "2025-07-24T12:00:22.747Z",
+    "category": "Gehalt",
+    "title": "test",
+    "amount": 123,
+    "paid": "Ja",
+    "costType": "Fix",
+    "description": ""
+  },
+  {
+    "date": "2025-07-24T12:00:39.756Z",
+    "category": "Gehalt",
+    "title": "test",
+    "amount": 123,
+    "paid": "Ja",
+    "costType": "Fix",
+    "description": "asd"
+  },
+  {
+    "date": "2025-07-24T12:00:41.107Z",
+    "category": "Gehalt",
+    "title": "test",
+    "amount": 123,
+    "paid": "Ja",
+    "costType": "Fix",
+    "description": "asd"
+  },
+  {
+    "date": "2025-07-24T12:00:43.020Z",
+    "category": "Gehalt",
+    "title": "test",
+    "amount": 123,
+    "paid": "Ja",
+    "costType": "Fix",
+    "description": "asd"
+  },
+  {
+    "date": "2025-07-24T12:00:43.467Z",
+    "category": "Gehalt",
+    "title": "test",
+    "amount": 123,
+    "paid": "Ja",
+    "costType": "Fix",
+    "description": "asd"
+  },
+  {
+    "date": "2025-07-24T12:00:48.579Z",
+    "category": "Gehalt",
+    "title": "test",
+    "amount": 123,
+    "paid": "Ja",
+    "costType": "Fix",
+    "description": "asd"
+  }
+]
