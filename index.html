@@ -1,0 +1,139 @@
+<!-- HTML-Datei: index.html -->
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ausgaben Tracker</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="https://unpkg.com/@phosphor-icons/web"></script>
+        <link
+            href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+            rel="stylesheet" />
+        <style>
+            .fade-in {
+                animation: fadeIn 0.5s ease-in-out;
+            }
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        </style>
+    </head>
+    <body
+        class="bg-gradient-to-tr from-blue-100 to-white min-h-screen p-4 sm:p-6">
+        <div
+            class="max-w-3xl mx-auto bg-white shadow-xl rounded-2xl p-4 sm:p-6 space-y-6">
+            <h1
+                class="text-2xl sm:text-3xl font-extrabold text-gray-800 flex items-center gap-2">
+                <i class="ph ph-wallet text-blue-600 text-xl sm:text-2xl"></i>
+                Ausgaben Tracker
+            </h1>
+            <form id="expenseForm" class="space-y-4 fade-in">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700"
+                        >Kategorie:</label
+                    >
+                    <select
+                        id="category"
+                        class="text-lg mt-1 block w-full rounded-lg border-gray-300 shadow-sm py-3 px-4">
+                        <option>Gehalt</option>
+                        <option>Miete</option>
+                        <option>Lebensmittel</option>
+                        <option>Auto</option>
+                        <option>Freizeit</option>
+                        <option>Sonstiges</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700"
+                        >Titel:</label
+                    >
+                    <input
+                        type="text"
+                        id="title"
+                        class="text-lg mt-1 block w-full rounded-lg border-gray-300 shadow-sm py-3 px-4"
+                        required />
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700"
+                        >Betrag (€):</label
+                    >
+                    <input
+                        type="number"
+                        id="amount"
+                        step="0.01"
+                        min="-100000"
+                        class="text-lg mt-1 block w-full rounded-lg border-gray-300 shadow-sm py-3 px-4"
+                        required />
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700"
+                        >Bezahlt?</label
+                    >
+                    <select
+                        id="paid"
+                        class="text-lg mt-1 block w-full rounded-lg border-gray-300 shadow-sm py-3 px-4">
+                        <option>Ja</option>
+                        <option>Nein</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700"
+                        >Fixkosten oder Variabel?</label
+                    >
+                    <select
+                        id="type"
+                        class="text-lg mt-1 block w-full rounded-lg border-gray-300 shadow-sm py-3 px-4">
+                        <option>Fix</option>
+                        <option>Variabel</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700"
+                        >Beschreibung:</label
+                    >
+                    <textarea
+                        id="description"
+                        class="text-lg mt-1 block w-full rounded-lg border-gray-300 shadow-sm py-3 px-4"></textarea>
+                </div>
+                <button
+                    type="submit"
+                    class="w-full sm:w-auto bg-blue-600 text-white text-lg px-6 py-3 rounded-lg hover:bg-blue-700 shadow-md flex items-center justify-center gap-2">
+                    <i class="ph ph-check-circle"></i> Speichern
+                </button>
+            </form>
+        </div>
+
+        <div class="max-w-3xl mx-auto mt-10">
+            <div class="flex justify-between items-center mb-4">
+                <h2
+                    id="viewTitle"
+                    class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-2">
+                    <i class="ph ph-calendar text-blue-600"></i> Monatsübersicht
+                </h2>
+                <button
+                    id="toggleViewBtn"
+                    class="bg-blue-100 text-blue-800 px-3 py-1 rounded-md text-sm font-medium hover:bg-blue-200">
+                    Jahresübersicht anzeigen
+                </button>
+            </div>
+
+            <div id="monthlyOverview" class="space-y-6 fade-in"></div>
+
+            <div id="yearlyOverview" class="space-y-6 fade-in hidden">
+                <div
+                    id="yearlySummary"
+                    class="grid grid-cols-2 sm:grid-cols-4 gap-4"></div>
+                <div id="monthlyDetail" class="space-y-6 mt-8 hidden"></div>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+</html>
